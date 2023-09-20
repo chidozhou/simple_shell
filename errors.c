@@ -9,23 +9,31 @@
  */
 void myerror_print(vars_t *myvars, char *mymsg)
 {
-	char *count;
+	char *count = my_uitoa(myvars->count);
+
+	if (!count)
+	{
+		perror("my_uitoa failed");
+		exit(EXIT_FAILURE);
+	}
 
 	myputs2(myvars->argv[0]);
 	myputs2(": ");
-	count = my_uitoa(myvars->count);
 	myputs2(count);
-	free(count);
 	myputs2(": ");
 	myputs2(myvars->av[0]);
+
 	if (mymsg)
 	{
 		myputs2(mymsg);
 	}
 	else
+	{
 		perror("");
-}
+	}
 
+	free(count);
+}
 /**
  * my_uitoa - converts an unsigned int to a string
  * @mycount: unsigned int to convert
@@ -35,25 +43,41 @@ void myerror_print(vars_t *myvars, char *mymsg)
 char *my_uitoa(unsigned int mycount)
 {
 	char *numstring;
-	unsigned int temp, digit;
+	int start = 0, end;
 
-	temp = mycount;
-	for (digit = 0; temp != 0; digit++)
+	if (mycount == 0)
 	{
-		temp /= 10;
+		numstring = malloc(sizeof(char) * 2);
+		if (numstring == NULL)
+		{
+			perror("Fatal Error1");
+			exit(127);
+		}
+		numstring[0] = '0';
+		numstring[1] = '\0';
+		return (numstring);
 	}
-	numstring = malloc(sizeof(char) * (digit + 1));
+
+	numstring = my_uitoa(mycount / 10);
+	end = strlen(numstring) - 1;
+	numstring = realloc(numstring, sizeof(char) * (strlen(numstring) + 2));
 	if (numstring == NULL)
 	{
 		perror("Fatal Error1");
 		exit(127);
 	}
-	numstring[digit] = '\0';
-	for (--digit; mycount; --digit)
+
+	/* Reverse the string */
+	while (start < end)
 	{
-		numstring[digit] = (mycount % 10) + '0';
-		mycount /= 10;
+		char temp = numstring[start];
+
+		numstring[start] = numstring[end];
+
+		numstring[end] = temp;
+		start++;
+		end--;
 	}
+
 	return (numstring);
 }
-
