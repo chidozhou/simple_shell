@@ -47,11 +47,11 @@ char *my_strtok(char *mystr, const char *mydelim)
 			break;
 		}
 	}
-	if (token_next[j] == '\0' || token_next[j] == '#')
-	{
-		token_next = NULL;
-		return (NULL);
-	}
+	/*if (token_next[j] == '\0' || token_next[j] == '#')*/
+	/*{*/
+		/*token_next = NULL;*/
+		/*return (NULL);*/
+	/*}*/
 	start_token = token_next + j;
 	token_next = start_token;
 	for (j = 0; token_next[j] != '\0'; j++)
