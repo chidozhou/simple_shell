@@ -1,5 +1,4 @@
 #include "shell.h"
-
 /**
  * my_rllocat - reallocates a pointer to double the space
  * @myptr: pointer to the old array
@@ -7,24 +6,33 @@
  *
  * Return: pointer to the newsize array
  */
-
 char **my_rllocat(char **myptr, size_t *mysize)
 {
-	char **newsize;
+	size_t new_size = (*mysize) * 2 + 10;
 	size_t j;
 
-	newsize = malloc(sizeof(char *) * ((*mysize) + 10));
-	if (newsize == NULL)
+	char **new_ptr = malloc(sizeof(char *) * new_size);
+
+	if (new_ptr == NULL)
 	{
 		free(myptr);
 		return (NULL);
 	}
+
 	for (j = 0; j < (*mysize); j++)
 	{
-		newsize[j] = myptr[j];
+		new_ptr[j] = myptr[j];
 	}
-	*mysize += 10;
+
+	for (j = (*mysize); j < new_size; j++)
+	{
+		new_ptr[j] = NULL;
+	}
+
+	*mysize = new_size;
+
 	free(myptr);
-	return (newsize);
+
+	return (new_ptr);
 }
 

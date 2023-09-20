@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * my_tkenizer - tokenizes a buffer with a delimiter
  * @buff: buffer to tokenize
@@ -16,16 +17,20 @@ char **my_tkenizer(char *buff, char *mydlimiter)
 	{
 		return (NULL);
 	}
+
 	token = malloc(sizeof(char *) * m_count);
 	if (token == NULL)
 	{
 		perror("Fatal Error");
 		return (NULL);
 	}
-	while ((token[j] = my_strtok(buff, mydlimiter)) != NULL)
+
+	for (; j < m_count; j++)
 	{
-		j++;
-		if (j == m_count)
+		token[j] = my_strtok(buff, mydlimiter);
+		if (token[j] == NULL)
+			break;
+		if (j == m_count - 1)
 		{
 			token = my_rllocat(token, &m_count);
 			if (token == NULL)
@@ -36,6 +41,7 @@ char **my_tkenizer(char *buff, char *mydlimiter)
 		}
 		buff = NULL;
 	}
+
 	return (token);
 }
 

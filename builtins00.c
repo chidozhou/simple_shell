@@ -8,7 +8,6 @@
  */
 void (*my_checkbins(vars_t *myvars))(vars_t *myvars)
 {
-	unsigned int j;
 	my_bins check[] = {
 		{"exit", my_exit},
 		{"env", my_env},
@@ -17,17 +16,18 @@ void (*my_checkbins(vars_t *myvars))(vars_t *myvars)
 		{NULL, NULL}
 	};
 
-	for (j = 0; check[j].f != NULL; j++)
+	unsigned int j = 0;
+
+	while (check[j].name != NULL)
 	{
 		if (my_strcmpr(myvars->av[0], check[j].name) == 0)
 		{
-			break;
+			check[j].f(myvars);
+			return (check[j].f);
 		}
+		j++;
 	}
-	if (check[j].f != NULL)
-	{
-		check[j].f(myvars);
-	}
-	return (check[j].f);
+
+	return (NULL);
 }
 

@@ -6,12 +6,13 @@
  */
 unsigned int my_strlen(char *strng)
 {
-	unsigned int length;
+	unsigned int length = 0;
 
-	length = 0;
+	while (strng[length] != '\0')
+	{
+		length++;
+	}
 
-	for (length = 0; strng[length]; length++)
-		;
 	return (length);
 }
 
@@ -23,17 +24,13 @@ unsigned int my_strlen(char *strng)
  */
 int my_strcmpr(char *mystrcmp1, char *mystrcmp2)
 {
-	int j;
+	int j = 0;
 
-	j = 0;
-	while (mystrcmp1[j] == mystrcmp2[j])
+	while (mystrcmp1[j] && mystrcmp2[j] && mystrcmp1[j] == mystrcmp2[j])
 	{
-		if (mystrcmp1[j] == '\0')
-		{
-			return (0);
-		}
 		j++;
 	}
+
 	return (mystrcmp1[j] - mystrcmp2[j]);
 }
 

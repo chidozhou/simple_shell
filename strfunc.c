@@ -8,45 +8,59 @@
  */
 ssize_t my_puts(char *strng)
 {
-	ssize_t number, length;
+	ssize_t number = my_strlen(strng);
+	ssize_t length = write(STDOUT_FILENO, strng, number);
 
-	number = my_strlen(strng);
-	length = write(STDOUT_FILENO, strng, number);
 	if (length != number)
 	{
 		perror("Fatal Error");
 		return (-1);
 	}
+
 	return (length);
 }
 
+
+
 /**
- * my_strdup - returns pointer to new mem alloc space which contains the_copy
- * @mystrtodup: string to be duplicated
+ * my_strdup - Duplicate a string.
+ * @mystrtodup: The string to duplicate.
  *
- * Return: a pointer to the new duplicated string
+ * Return: A pointer to the duplicated str
  */
 char *my_strdup(char *mystrtodup)
 {
+	size_t length;
 	char *the_copy;
+	size_t i;
 
-	int length, j;
-
-	if (mystrtodup == 0)
+	if (mystrtodup == NULL)
 	{
 		return (NULL);
 	}
 
-	for (length = 0; mystrtodup[length]; length++)
-		;
+	length = strlen(mystrtodup);
 	the_copy = malloc((length + 1) * sizeof(char));
-
-	for (j = 0; j <= length; j++)
+	if (the_copy == NULL)
 	{
-		the_copy[j] = mystrtodup[j];
+		return (NULL);
 	}
+
+	for (i = 0; i <= length; i++)
+	{
+		the_copy[i] = mystrtodup[i];
+	}
+
 	return (the_copy);
 }
+
+
+
+
+
+
+
+
 
 
 /**
@@ -58,39 +72,42 @@ char *my_strdup(char *mystrtodup)
 
 char *my_strcat(char *mystrc1, char *mystrc2)
 {
-	char *new_str;
-	unsigned int length1, length2, n_length, k, j;
+	size_t length1;
+	size_t length2;
+	size_t n_length;
+	size_t j;
+	size_t i;
 
-	length1 = 0;
-	length2 = 0;
-	if (mystrc1 == NULL)
+	char *new_str;
+
+	if (mystrc1 == NULL || mystrc2 == NULL)
 	{
-		length1 = 0;
+		return (NULL);
 	}
-	else
-	{
-		for (length1 = 0; mystrc1[length1]; length1++)
-			;
-	}
-	if (mystrc2 == NULL)
-		length2 = 0;
-	else
-	{
-		for (length2 = 0; mystrc2[length2]; length2++)
-			;
-	}
+
+	length1 = strlen(mystrc1);
+	length2 = strlen(mystrc2);
 	n_length = length1 + length2 + 2;
+
 	new_str = malloc(n_length * sizeof(char));
 	if (new_str == NULL)
-		return (NULL);
-	for (k = 0; k < length1; k++)
 	{
-		new_str[k] = mystrc1[k];
+		return (NULL);
 	}
-	new_str[k] = '/';
+
+	for (i = 0; i < length1; i++)
+	{
+		new_str[i] = mystrc1[i];
+	}
+	new_str[length1] = '/';
+
 	for (j = 0; j < length2; j++)
-		new_str[k + 1 + j] = mystrc2[j];
-	new_str[length1 + length2 + 1] = '\0';
+	{
+		new_str[length1 + 1 + j] = mystrc2[j];
+	}
+
+	new_str[n_length - 1] = '\0';
+
 	return (new_str);
 }
 
