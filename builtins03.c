@@ -16,6 +16,7 @@ void myset_environ(vars_t *myvars)
 		myvars->status = 2;
 		return;
 	}
+	/*Find the key*/
 	the_key = mykey_find(myvars->env, myvars->av[1]);
 	if (the_key == NULL)
 	{
@@ -33,9 +34,11 @@ void myset_environ(vars_t *myvars)
 			clear_environ(myvars->env);
 			exit(127);
 		}
+		/*Free the old value*/
 		free(*the_key);
 		*the_key = v;
 	}
+	/*Set the exit status*/
 	myvars->status = 0;
 }
 
