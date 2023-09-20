@@ -46,7 +46,7 @@ int main(int argc __attribute__((unused)), char **argv, char **environment)
 	while (getline(&(vars.buffer), &length_buffer, stdin) != -1)
 	{
 		vars.count++;
-		vars.commands = my_tkenizer(vars.buffer, ";");
+		/*vars.commands = my_tkenizer(vars.buffer, ";");*/
 		for (j = 0; vars.commands && vars.commands[j] != NULL; j++)
 		{
 			vars.av = my_tkenizer(vars.commands[j], "\n \t\r");
