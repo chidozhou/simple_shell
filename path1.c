@@ -1,4 +1,6 @@
 #include "shell.h"
+#include <string.h>
+
 /**
  * mypath_find - finds the PATH variable
  * @myenv: array of environment variables
@@ -7,21 +9,29 @@
  */
 char *mypath_find(char **myenv)
 {
-	char *path = "PATH=";
-	unsigned int i, j;
+	char *path_variable = "PATH=";
+	size_t path_len = strlen(path_variable);
+	size_t i;
 
-	for (i = 0; myenv[i] != NULL; i++)
+	if (myenv == NULL)
+		return (NULL);
+
+	while (*myenv)
 	{
-		for (j = 0; j < 5; j++)
-			if (path[j] != myenv[i][j])
-			{
-				break;
-			}
-		if (j == 5)
-		{
-			break;
-		}
-	}
-	return (myenv[i]);
-}
+		char *env_var = *myenv;
 
+		for (i = 0; env_var[i] != '\0' && i < path_len; i++)
+		{
+			if (env_var[i] != path_variable[i])
+				break;
+		}
+
+		if (i == path_len)
+		{
+			return (env_var);
+		}
+
+		myenv++;
+	}
+	return (NULL);
+}
