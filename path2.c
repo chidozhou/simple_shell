@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * mypath_check - checks if the command is in the PATH
  * @myvars: variables
@@ -7,45 +8,45 @@
  */
 void mypath_check(vars_t *myvars)
 {
-	char *the_path, *path_dup = NULL, *checker = NULL;
-	unsigned int j = 0, k = 0;
-	char **token_path;
+	char *the_path = NULL;
+	char **token_path = NULL;
+	char *checker = NULL;
 	struct stat buff;
+	int found = 0;
+	unsigned int j;
 
-	if (mydir_check(myvars->av[0]))
-		k = mycwd_exe(myvars);
-	else
-	{
-		the_path = mypath_find(myvars->env);
-		if (the_path != NULL)
+	if (mydir_check(myvars->av[0])
 		{
-			path_dup = my_strdup(the_path + 5);
-			token_path = my_tkenizer(path_dup, ":");
-			for (j = 0; token_path && token_path[j]; j++, free(checker))
-			{
-				checker = my_strcat(token_path[j], myvars->av[0]);
-				if (stat(checker, &buff) == 0)
-				{
-					k = mypath_exe(checker, myvars);
-					free(checker);
-					break;
-				}
-			}
-			free(path_dup);
-			if (token_path == NULL)
-			{
-				myvars->status = 127;
-				my_exit(myvars);
-			}
+			mycwd_exe(myvars);
+			return;
 		}
-		if (the_path == NULL || token_path[j] == NULL)
+
+		the_path = mypath_find(myvars->env);
+		if (the_path == NULL)
 		{
 			myerror_print(myvars, ": not found\n");
 			myvars->status = 127;
+			my_exit(myvars);
 		}
-		free(token_path);
-	}
-	if (k == 1)
+
+		token_path = my_tkenizer(the_path + 5, ":");
+		for (j = 0; token_path[j]; j++)
+		{
+			checker = my_strcat(token_path[j], myvars->av[0]);
+			if (stat(checker, &buff) == 0)
+			{
+				found = 1;
+				break;
+			}
+			free(checker);
+		}
+	free(token_path);
+	if (!found)
+	{
+		myerror_print(myvars, ": not found\n");
+		myvars->status = 127;
 		my_exit(myvars);
+	}
+	mypath_exe(checker, myvars);
 }
 
